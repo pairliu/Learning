@@ -16,7 +16,6 @@
 package org.easymock.samples;
 
 import org.easymock.EasyMockSupport;
-import static org.easymock.EasyMock.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
