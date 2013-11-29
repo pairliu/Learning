@@ -9,13 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
@@ -24,6 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.pairliu.learning.learningrest.entities.Customer;
@@ -35,7 +30,7 @@ public class CustomerResourceService implements CustomerResource {
     public Response createCustomer(InputStream is) {
         // Any non-JAX-RS-annotated parameter is considered to be a
         // representation of request's body.
-        // So here the parameter InputStream is the body.
+        // So here the parameter InputStream is the body. In fact there should be only one such parameter
         Customer customer = readCustomer(is);
         customer.setId(idCounter.incrementAndGet());
         customerDB.put(customer.getId(), customer);
@@ -94,7 +89,8 @@ public class CustomerResourceService implements CustomerResource {
             }
             NodeList nodes = root.getChildNodes();
             for (int i = 0; i < nodes.getLength(); i++) {
-                Element element = (Element) nodes.item(i);
+                Node node = nodes.item(i);
+                Element element = (Element) node;
                 if (element.getTagName().equals("first-name")) {
                     cust.setFirstName(element.getTextContent());
                 } else if (element.getTagName().equals("last-name")) {
