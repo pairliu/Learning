@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      
+      class Clock extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {date: new Date()};   
+        }
+
+        componentDidMount() {
+          //this.timerID = setInterval(updateTime, 1000);             //错误，找不到updateTime方法
+          //this.timerID = setInterval(this.updateTime, 1000);        //找到了，但是没有每秒更新：错误是this.setState is not a function （原因应该是简单的传函数的引用，就丢失了this了？好像是的，这时候this指向了该函数，而不是当前类的对象）
+          this.timerID = setInterval(() => this.updateTime(), 1000);  //这才正确了
+        }
+
+        componentWillUnmount() {
+          clearInterval(this.timerID);
+        }
+
+        updateTime() {
+          this.setState({date: new Date()});
+        }
+        
+        render() {
+          return (
+            <div>
+              <h1>Hello, world!</h1>
+              <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <Clock/>, 
+        document.getElementById('root')
+      );
+
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      To set up a production-ready React build environment, follow these instructions:
+      * https://reactjs.org/docs/add-react-to-a-new-app.html
+      * https://reactjs.org/docs/add-react-to-an-existing-app.html
+
+      You can also use React without JSX, in which case you can remove Babel:
+      * https://reactjs.org/docs/react-without-jsx.html
+      * https://reactjs.org/docs/cdn-links.html
+    -->
+  </body>
+</html>
